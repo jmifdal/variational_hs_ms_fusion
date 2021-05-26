@@ -7,3 +7,5 @@ bin
 Makefile (copie)
 libBasic_files_floats_originals
 fused*
+comments_dockerfile
+.gitignore
