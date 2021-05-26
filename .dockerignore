@@ -1,0 +1,9 @@
+experiment* 
+test
+command_history 
+Questions_to_answer
+bin
+*.o
+Makefile (copie)
+libBasic_files_floats_originals
+README.md
