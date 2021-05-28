@@ -1,0 +1,1 @@
+1.09458 -  hDist: 2.5, hPatch: 0.01, lmbP: 0.001, lmbM: 0.1, lmbH: 50, rmse=1.19129 and psnr=46.56553
