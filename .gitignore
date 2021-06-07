@@ -5,6 +5,7 @@ Questions_to_answer
 bin
 *.o
 Makefile (copie)
+Makefile_original
 libBasic_files_floats_originals
 fused*
 comments_dockerfile
