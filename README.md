@@ -50,7 +50,7 @@ The fusion result will be available in the ```demo``` folder in the cloned repos
 </html>
 
 ## Citation
-If you use our code please consider citing our work
+For citing our work
 
 ```
 @article{mifdal2021variational,
@@ -64,6 +64,7 @@ If you use our code please consider citing our work
   publisher={Multidisciplinary Digital Publishing Institute}
 }
 ```
-
+## Contact
+If you have any questions please let us know: <jamila.mifdal@esa.int> and <joan.duran@uib.es>
 
 
