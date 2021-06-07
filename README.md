@@ -26,6 +26,9 @@ The ```demo.sh``` script executes three commands: it moves to the ```demo``` fol
 ```bash
 docker run --name demofusion -v $PWD/demo:/home/demo hsmsfusion sh demo.sh
 ```
+## Using other dataset
+In case you want to run the fusion with your own ```hyperspectral (hs)``` and ```multispectral (ms)``` data, the ```interpolated hs``` image, the ```panchromatic``` image and the ```interpolated panchromatic``` image should be generated. For this, you just have to, in the ```batch_hyperspectral_data.sh```, comment out the parts that generate the ```hs``` and ```ms``` images and rename the ```hs``` and ```ms``` images into: ```name.hyper.noisy.tif``` and ```name.multi.noisy.tif``` respectively where ```name``` is the name of the image before executing the ```demo.sh``` script.
+
 ## Recovering the fusion result
 The fusion result will be available in the ```demo``` folder in the cloned repository.  
 
@@ -45,6 +48,22 @@ The fusion result will be available in the ```demo``` folder in the cloned repos
     </figure>
     </body>
 </html>
+
+## Citation
+If you use our code please consider citing our work
+
+```
+@article{mifdal2021variational,
+  title={Variational Fusion of Hyperspectral Data by Non-Local Filtering},
+  author={Mifdal, Jamila and Coll, Bartomeu and Froment, Jacques and Duran, Joan},
+  journal={Mathematics},
+  volume={9},
+  number={11},
+  pages={1265},
+  year={2021},
+  publisher={Multidisciplinary Digital Publishing Institute}
+}
+```
 
 
 
