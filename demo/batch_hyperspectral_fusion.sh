@@ -1,22 +1,5 @@
 ##
 ## First, we compute the NL weights and store all required data as tif files.
-##
-## Options available:
-##
-##   - 1 : weights computed on MS (the same for all bands).
-##   - 2 : weights computed on MS with Smatrix coefficients.
-##   - 3 : weights computed on each upsampled HS band.
-##   - 4 : weights computed on full upsampled HS (the same for all bands).
-##   - 5 : weights computed on nearest upsampled HS bands.
-##   - 6 : neighbors selected on full upsampled HS and weights computed just on associated HS band.
-##   - 7 : neighbors selected on full MS and weights computed just on associated HS band.
-##   - 8 : neighbors selected on full MS with Smatrix coefficients and weights computed just on associated HS band.
-##   - 9 : weights computed on MS with Smatrix coefficients (NEW CODE of the weight option 2 ).
-##
-## src_hyperspectral_fusion_L1_weights -c $hPatch -d $hDist -n $numNeigh -b $bandSize -r $resSize -p $patchSize $name.multi.tif
-##                                     $name.hyper.int.tif $S.tif $weightOpt wxy.tif wyx.tif posxy.tif posyx.tif posw.tif
-##                                     numxy.tif numyx.tif
-##
 ## hPatch     filtering parameter for patch distance in NL weights
 ## hDist	  filtering parameter for spatial distance in NL weights
 ## numNeigh	  number of (most similar) neighboring pixels used in NL weights
@@ -27,7 +10,6 @@
 ## name.multi.noisy.tif      input MS noisy image
 ## name.hyper.noisy.int.tif  input bicubicly interpolated HS noisy image
 ## S.tif                     input spectral-downsampling matrix
-## weightOpt                 input NL weight option (1-9)
 ## wxy.tif                   output weights wxy
 ## wyx.tif                   output weights wxy
 ## posxy.tif                 output neighbour pixel positions posxy
@@ -38,11 +20,7 @@
 ##
 ##
 ## Then, we apply primal-dual fusion algorithm
-##
-## src_hyperspectral_fusion_L1 -m $lmbM -h $lmbH -u $lmbP -e $tol -i $maxIter -t $primalStep -s $dualStep $name.multi.noisy.tif
-##                             $name.hyper.noisy.tif $name.hyper.noisy.int.tif $name.pan.noisy.tif $name.pan.noisy.int.tif wxy.tif wyx.tif
-##                             posxy.tif posyx.tif posw.tif numxy.tif numyx.tif $S.tif $St.tif $blur $sampling fused.tif
-##
+
 ## lmbM	       trade-off parameter for multispectral data term
 ## lmbH	       trade-off parameter for hyperspectral data term
 ## lmbP	       trade-off paramater for radiometric constraint
@@ -75,7 +53,7 @@
 name=$1        # name of the image (without .tif)
 S=$2           # name of the spectral response (without .tif)
 St=$3          # name of the transposed spectral response (without .tif)
-weightOpt=$4   # choose weight option 1-9
+
 
 
 ## txt files
@@ -130,18 +108,18 @@ hPatch=0.01
 
 	echo "The experiments are running for hPatch = $hPatch"
 
-    src_hyperspectral_fusion_L2_weights -c $hPatch -d $hDist -n $numNeigh -b $bandSize -r $resSize -p $patchSize $name.multi.noisy.tif $name.hyper.noisy.int.tif $S.tif $weightOpt wxy.tif wyx.tif posxy.tif posyx.tif posw.tif numxy.tif numyx.tif
+    src_hyperspectral_fusion_L2_ninthWeight -c $hPatch -d $hDist -n $numNeigh -b $bandSize -r $resSize -p $patchSize $name.multi.noisy.tif $name.hyper.noisy.int.tif $S.tif wxy.tif wyx.tif posxy.tif posyx.tif posw.tif numxy.tif numyx.tif
     
     lmbP=0.001
     lmbM=0.1
     lmbH=50
  
-    src_hyperspectral_fusion_L2 -m $lmbM -h $lmbH -u $lmbP -e $tol -i $maxIter -t $primalStep -s $dualStep $name.multi.noisy.tif $name.hyper.noisy.tif $name.hyper.noisy.int.tif $name.pan.noisy.tif $name.pan.noisy.int.tif wxy.tif wyx.tif posxy.tif posyx.tif posw.tif numxy.tif numyx.tif $S.tif $St.tif $blur $sampling fused_wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif
+    src_hyperspectral_fusion_L2 -m $lmbM -h $lmbH -u $lmbP -e $tol -i $maxIter -t $primalStep -s $dualStep $name.multi.noisy.tif $name.hyper.noisy.tif $name.hyper.noisy.int.tif $name.pan.noisy.tif $name.pan.noisy.int.tif wxy.tif wyx.tif posxy.tif posyx.tif posw.tif numxy.tif numyx.tif $S.tif $St.tif $blur $sampling fused.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif
 
     
-    rmse=$( src_lp_dist -b 10 $name.tif fused_wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif )
-    sam=$( src_sam  -b 10 $name.tif fused_wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif )
-    psnr=$( src_psnr  -b 10 $name.tif fused_wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif )
+    rmse=$( src_lp_dist -b 10 $name.tif fused.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif )
+    sam=$( src_sam  -b 10 $name.tif fused.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif )
+    psnr=$( src_psnr  -b 10 $name.tif fused.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif )
 
     echo "psnr = $psnr, rmse = $rmse, sam = $sam - hD: $hDist, hP: $hPatch, lP: $lmbP, lM: $lmbM, lH: $lmbH"
     echo "$rmse - hDist: $hDist, hPatch: $hPatch, lmbP: $lmbP, lmbM: $lmbM, lmbH: $lmbH, psnr=$psnr and sam=$sam" >> $fileRMSE
@@ -156,19 +134,16 @@ hPatch=0.01
 
     if [ "$isSmallerRMSE" -eq 1 ]; then
         echo "$rmse - hP: $hPatch, lP: $lmbP, lM: $lmbM, lH: $lmbH, psnr=$psnr and sam=$sam" >> $fileRMSEmin
-        #cp fused.tif fused.wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif
         rmseMin=$rmse
     fi
 
     if [ "$isSmallerSAM" -eq 1 ] && [ "$isGreaterSAMthanLimit" -eq 1 ]; then
         echo "$sam - hP: $hPatch, lP: $lmbP, lM: $lmbM, lH: $lmbH, rmse=$rmse and psnr=$psnr" >> $fileSAMmin
-        #cp fused.tif fused.wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif
          samMin=$sam
     fi
 
     if [ "$isGreaterPSNR" -eq 1 ]; then
         echo "$psnr - hP: $hPatch, lP: $lmbP, lM: $lmbM, lH: $lmbH, rmse=$rmse and sam=$sam" >> $filePSNRmax
-        #cp fused.tif fused.wOpt$weightOpt.hP$hPatch.lP$lmbP.lM$lmbM.lH$lmbH.tif
         psnrMax=$psnr
     fi
 
