@@ -28,3 +28,23 @@ docker run --name demofusion -v $PWD/demo:/home/demo hsmsfusion sh demo.sh
 ```
 ## Recovering the fusion result
 The fusion result will be available in the ```demo``` folder in the cloned repository.  
+
+## Fusion example 
+<html>
+    <body>
+    <figure>
+    <p align="middle">
+    <img src="./example_fusion/gt.png" width="200" >
+      &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="./example_fusion/h_interp.png" width="200">
+      &nbsp; &nbsp; &nbsp; &nbsp;
+    <img src="./example_fusion/l2.png" width="200">
+      &nbsp; &nbsp; &nbsp; &nbsp;
+    <figcaption>Example of fusion on the image "Bicycles" from Harvard dataset. From left to right. Ground truth image, hyperspectral image and the fused image with the variational model.</figcaption>
+    </p>
+    </figure>
+    </body>
+</html>
+
+
+
